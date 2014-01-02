@@ -20,8 +20,8 @@ var spiADC = {
 	'res_index': 0,	
 	'series_resistor': 10000,
 	'thermistor': {
-		//'nominal_resistance': 97500,
-		'nominal_resistance': 55500,
+		'nominal_resistance': 97500,
+		//'nominal_resistance': 55500,
 		'nominal_temp': 25,
 		'bcoefficient': 3950
 	},	
@@ -81,7 +81,7 @@ var spiADC = {
 			sum += parseInt(this.resistances[i]);
 		}
 		
-		return sum / spiADC.resistances.length;		
+		return sum / this.resistances.length;		
 		
 	},
 	calculate_thermistor_resistance: function( average_raw ){
