@@ -86,6 +86,7 @@ var spiADC = {
 	},
 	calculate_thermistor_resistance: function( average_raw ){
 		console.log('average raw: ' + average_raw);
+		console.log('series resistor: ' + this.series_resistor);
 		var thermistor_resistance =  (1023 / average_raw - 1);
 		
 		thermistor_resistance = this.series_resistor / thermistor_resistance;
