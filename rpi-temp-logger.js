@@ -20,7 +20,7 @@ var spiADC = {
 	'res_index': 0,	
 	'series_resistor': 10000,
 	'thermistor': {
-		'nominal_resistance': 97500,
+		'nominal_resistance': 10000,
 		//'nominal_resistance': 55500,
 		'nominal_temp': 25,
 		'bcoefficient': 3950
