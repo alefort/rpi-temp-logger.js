@@ -20,7 +20,7 @@ var spiADC = {
 	'res_index': 0,	
 	'series_resistor': 10000,
 	'thermistor': {
-		'nominal_resistance': 10000,
+		'nominal_resistance': 97500,
 		//'nominal_resistance': 55500,
 		'nominal_temp': 25,
 		'bcoefficient': 3950
@@ -90,7 +90,9 @@ var spiADC = {
 		var thermistor_resistance =  (1023 / (average_raw - 1) );
 		console.log('thermistor resistance: ' + thermistor_resistance);
 		thermistor_resistance = this.series_resistor / thermistor_resistance;
+		console.log('thermistor resistance: ' + thermistor_resistance);
 		thermistor_resistance = Math.round(thermistor_resistance * 1000) / 100;
+		console.log('thermistor resistance: ' + thermistor_resistance);
 				
 		return thermistor_resistance;
 	},
