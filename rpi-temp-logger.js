@@ -85,11 +85,13 @@ var spiADC = {
 		
 	},
 	calculate_thermistor_resistance: function( average_raw ){
+		console.log('average raw: ' + average_raw);
 		var thermistor_resistance =  (1023 / average_raw)  - 1;
 		
 		thermistor_resistance = this.series_resistor / thermistor_resistance;
 		thermistor_resistance = Math.round(thermistor_resistance * 100) / 100;
 		
+		console.log('resistance from average raw: ' + thermistor_resistance);
 		return thermistor_resistance;
 	},
 	steinhart: function( thermistor_resistance ){
