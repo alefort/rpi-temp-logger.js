@@ -31,7 +31,10 @@ var spiADC = {
 			return;
 		}
 		
-		this.device = new this.SPI.Spi('/dev/spidev0.0', {}, function(s){s.open();});
+		this.device = new this.SPI.Spi('/dev/spidev0.0', {
+			'mode': SPI.MODE['MODE_0'],  // always set mode as the first option
+			'chipSelect': SPI.CS['none'] // 'none', 'high' - defaults to low
+		}, function(s){s.open();});
 		
 		this.isOpen = true;
 	},
