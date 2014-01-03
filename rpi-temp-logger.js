@@ -18,10 +18,9 @@ var spiADC = {
 	'device': '',
 	'resistances': [],	
 	'res_index': 0,	
-	'series_resistor': 10000,
+	'series_resistor': 9860,
 	'thermistor': {
-		'nominal_resistance': 10000,
-		//'nominal_resistance': 55500,
+		'nominal_resistance': 24000,		
 		'nominal_temp': 25,
 		'bcoefficient': 3950
 	},	
