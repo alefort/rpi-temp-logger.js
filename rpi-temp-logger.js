@@ -86,13 +86,13 @@ var spiADC = {
 	},
 	calculate_thermistor_resistance: function( average_raw ){
 		console.log('average raw: ' + average_raw);
-		console.log('series resistor: ' + this.series_resistor);
-		var thermistor_resistance =  (1023 / average_raw) - 1;
-		console.log('thermistor resistance: ' + thermistor_resistance);
-		thermistor_resistance = this.series_resistor / thermistor_resistance;
-		console.log('thermistor resistance: ' + thermistor_resistance);
+				
+		var thermistor_resistance =  (1023 / average_raw) - 1;				
+		thermistor_resistance = this.series_resistor / thermistor_resistance;		
 		thermistor_resistance = Math.round(thermistor_resistance * 100) / 100;
-		console.log('thermistor resistance: ' + thermistor_resistance);
+		
+		var voltage = average_raw * 3.28 / 1023;
+		console.log('voltage: ' + voltage);
 				
 		return thermistor_resistance;
 	},
@@ -230,7 +230,7 @@ setInterval( function(){
 	var averageTemp = spiADC.getAverageTemperature( averageData );
 	var model = DataPointModel.create( Math.round(new Date().getTime() / 1000), averageTemp );
 	DataLogger.addDataPoint(model);
-}, 200);
+}, 2000);
 /* Write the data we've captured to the data file and send our updates to the web app */
 setInterval( function(){
 	DataLogger.sendDataUpdate();
