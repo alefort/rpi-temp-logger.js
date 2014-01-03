@@ -230,7 +230,7 @@ setInterval( function(){
 	var averageTemp = spiADC.getAverageTemperature( averageData );
 	var model = DataPointModel.create( Math.round(new Date().getTime() / 1000), averageTemp );
 	DataLogger.addDataPoint(model);
-}, 2000);
+}, 200);
 /* Write the data we've captured to the data file and send our updates to the web app */
 setInterval( function(){
 	DataLogger.sendDataUpdate();
