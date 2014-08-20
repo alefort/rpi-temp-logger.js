@@ -216,7 +216,7 @@ DataLogger.init( '/home/pi/thermo-app/data/readings.data' );
 /* Open the spi device */
 spiADC.open();
 /* Start reading the data from the spi device every XX ms */
-setInterval( function(){ spiADC.read(); }, 33);
+setInterval( function(){ spiADC.read(); }, 10);
 /* Let's get an average every XX ms */
 setInterval( function(){ 
 	var averageData = spiADC.getAverageData();
