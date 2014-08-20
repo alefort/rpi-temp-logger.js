@@ -47,8 +47,7 @@ var spiADC = {
 		return data;		
 	},
 	storeSpiData: function( device, data ){			
-		this.resistances[this.res_index] = data;
-		//console.log('[' + this.res_index + '] ' + data + ' on device ' + device.device);
+		this.resistances[this.res_index] = data;		
 	},
 	setNextResistanceIndex: function(){
 		this.res_index++;
@@ -77,7 +76,7 @@ var spiADC = {
 		
 		var sum = 0;
 		for(var i = 0; i < this.resistances.length; i++){		
-			sum += parseInt(this.resistances[i]);
+			sum += parseFloat(this.resistances[i]);
 		}
 		
 		return sum / this.resistances.length;		
