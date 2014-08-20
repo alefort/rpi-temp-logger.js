@@ -10,7 +10,7 @@ var needle = require('needle');
 var spiADC = {
 	'options': {
 		'channel': 0,
-		'resistances_to_keep': 30,
+		'resistances_to_keep': 100,
 		'ignore_data_beyond_pct': 0.05
 	},
 	'SPI': require( 'spi' ),
