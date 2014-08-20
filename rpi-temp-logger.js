@@ -103,7 +103,7 @@ var spiADC = {
 	},
 	getAverageTemperature: function( average_resistance) {
 		var thermistor_resistance = this.calculate_thermistor_resistance( average_resistance );
-		var steinhart = Math.round( this.steinhart( thermistor_resistance ) * 100) / 100;		
+		var steinhart = this.steinhart( thermistor_resistance );		
 		
 		console.log('thermistor resistance: ' + thermistor_resistance);
 		console.log('thermistor temperature: ' + steinhart);
@@ -220,7 +220,7 @@ setInterval( function(){ spiADC.read(); }, 33);
 /* Let's get an average every XX ms */
 setInterval( function(){ 
 	var averageData = spiADC.getAverageData();
-	var averageTemp = spiADC.getAverageTemperature( averageData );
+	var averageTemp = Math.round( spiADC.getAverageTemperature( averageData ) * 100 ) / 100;
 	var model = DataPointModel.create( Math.round(new Date().getTime() / 1000), averageTemp );
 	DataLogger.addDataPoint(model);
 }, 2000);
