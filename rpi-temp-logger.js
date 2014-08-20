@@ -88,7 +88,7 @@ var spiADC = {
 				
 		var thermistor_resistance =  (1023 / average_raw) - 1;				
 		thermistor_resistance = this.series_resistor / thermistor_resistance;		
-		thermistor_resistance = Math.round(thermistor_resistance * 100) / 100;
+		
 		
 		var voltage = average_raw * 3.28 / 1023;
 		console.log('voltage: ' + voltage);
