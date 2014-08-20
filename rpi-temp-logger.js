@@ -106,7 +106,7 @@ var spiADC = {
 		var steinhart = this.steinhart( thermistor_resistance );		
 		
 		console.log('thermistor resistance: ' + thermistor_resistance);
-		console.log('thermistor temperature: ' + steinhart);
+		console.log('thermistor temperature: ' + Math.round( steinhart * 100 ) / 100);
 		
 		return steinhart;
 	}
