@@ -76,8 +76,7 @@ var spiADC = {
 		}
 		
 		var sum = 0;
-		for(var i = 0; i < this.resistances.length; i++){
-		console.log('raw resistance: ' +this.resistances[i]);
+		for(var i = 0; i < this.resistances.length; i++){		
 			sum += parseInt(this.resistances[i]);
 		}
 		
