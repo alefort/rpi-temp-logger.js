@@ -10,7 +10,7 @@ var needle = require('needle');
 var spiADC = {
 	'options': {
 		'channel': 0,
-		'resistances_to_keep': 200,
+		'resistances_to_keep': 1000,
 		'ignore_data_beyond_pct': 0.02
 	},
 	'SPI': require( 'spi' ),
@@ -223,9 +223,9 @@ setInterval( function(){
 	var averageTemp = Math.round( spiADC.getAverageTemperature( averageData ) * 100 ) / 100;
 	var model = DataPointModel.create( Math.round(new Date().getTime() / 1000), averageTemp );
 	DataLogger.addDataPoint(model);
-}, 2000);
+}, 10000);
 /* Write the data we've captured to the data file and send our updates to the web app */
 setInterval( function(){
 	DataLogger.sendDataUpdate();
 	DataLogger.writeDataToFile();	
-}, 60000);
+}, 20000);
