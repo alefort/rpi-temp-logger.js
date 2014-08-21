@@ -11,8 +11,7 @@ var spiADC = {
 	'options': {
 		'channel': 0,
 		'resistances_to_keep': 1000,
-		'ignore_data_beyond_pct': 0.02,
-		'calibration_adjustment': 0.5
+		'ignore_data_beyond_pct': 0.02		
 	},
 	'SPI': require( 'spi' ),
 	'isOpen': false,	
@@ -23,7 +22,8 @@ var spiADC = {
 	'thermistor': {
 		'nominal_resistance': 10000,		
 		'nominal_temp': 25,
-		'bcoefficient': 3950
+		'bcoefficient': 3950,
+		'calibration_offset': -0.07
 	},	
 	open: function(){
 		if(this.isOpen === true){
@@ -89,7 +89,7 @@ var spiADC = {
 		var thermistor_resistance =  (1023 / average_raw) - 1;				
 		thermistor_resistance = this.series_resistor / thermistor_resistance;		
 						
-		return thermistor_resistance;
+		return thermistor_resistance + this.thermistor.calibration_offset;
 	},
 	steinhart: function( thermistor_resistance ){
 		var steinhart = thermistor_resistance / this.thermistor.nominal_resistance;
