@@ -11,7 +11,8 @@ var spiADC = {
 	'options': {
 		'channel': 0,
 		'resistances_to_keep': 1000,
-		'ignore_data_beyond_pct': 0.02
+		'ignore_data_beyond_pct': 0.02,
+		'calibration_adjustment': 0.5
 	},
 	'SPI': require( 'spi' ),
 	'isOpen': false,	
@@ -223,7 +224,7 @@ setInterval( function(){
 	var averageTemp = Math.round( spiADC.getAverageTemperature( averageData ) * 100 ) / 100;
 	var model = DataPointModel.create( Math.round(new Date().getTime() / 1000), averageTemp );
 	DataLogger.addDataPoint(model);
-}, 10000);
+}, 2000);
 /* Write the data we've captured to the data file and send our updates to the web app */
 setInterval( function(){
 	DataLogger.sendDataUpdate();
