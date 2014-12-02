@@ -121,7 +121,7 @@ var spiADC = {
 var DataLogger = {
 	'options': {
 		'logfile': '',
-		'endpointUrl': 'http://192.168.1.126/dev/test.php',
+		'endpointUrl': 'http://192.168.1.126/beer/rpi-graph/api.php',
 		'timeout': 5000
 	},	
 	'txError': false,
@@ -212,18 +212,13 @@ var DataPointModel = {
 };
 
 // Configure our HTTP server to respond with Hello World to all requests.
-var server = http.createServer(function (request, response) {	
+var httpServer = http.createServer(function (request, response) {	
 	response.writeHead( 200, {
 		'Content-Type': 'application/json'
 	});
 	
 	response.end( DataLogger.readDataFile() );
 });
-
-// Listen on port 8000, IP defaults to 127.0.0.1
-server.listen(8000);
-
-DataLogger.init( '../data/readings.data' );
 
 var ThermoApp = {
 	'options': {
@@ -252,6 +247,10 @@ var ThermoApp = {
 	}
 };
 
+// Listen on port 8000, IP defaults to 127.0.0.1
+httpServer.listen(8000);
+
+DataLogger.init( '../data/readings.data' );
 
 ThermoApp.init(spiADC);
 ThermoApp.run(spiADC);
