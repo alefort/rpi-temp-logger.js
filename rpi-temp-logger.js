@@ -117,6 +117,7 @@ var spiADC = {
 		return steinhart;
 	}
 };
+
 var DataLogger = {
 	'options': {
 		'logfile': '',
@@ -224,19 +225,33 @@ server.listen(8000);
 
 DataLogger.init( '../data/readings.data' );
 
-/* Open the spi device */
-spiADC.open();
-/* Start reading the data from the spi device every XX ms */
-setInterval( function(){ spiADC.read(); }, 1 / spiADC.options.resistances_to_keep);
-/* Let's get an average every XX ms */
-setInterval( function(){ 
-	var averageData = spiADC.getAverageData();
-	var averageTemp = Math.round( spiADC.getAverageTemperature( averageData ) * 100 ) / 100;
-	var model = DataPointModel.create( Math.round(new Date().getTime() / 1000), averageTemp );
-	DataLogger.addDataPoint(model);
-}, 3000);
-/* Write the data we've captured to the data file and send our updates to the web app */
-setInterval( function(){
-	DataLogger.sendDataUpdate();
-	DataLogger.writeDataToFile();	
-}, 20000);
+var ThermoApp = {
+	'options': {
+		'temperature_read_interval': 10000,
+		'data_logging_interval': 20000
+	},
+	init: function(spiADC){
+		/* Open the spi device */
+		spiADC.open();
+	},
+	run: function(spiADC){
+		/* Start reading the data from the spi device every XX ms */
+		setInterval( function(){ spiADC.read(); }, 1 / spiADC.options.resistances_to_keep);
+		/* Let's get an average every XX ms */
+		setInterval( function(){ 
+			var averageData = spiADC.getAverageData();
+			var averageTemp = Math.round( spiADC.getAverageTemperature( averageData ) * 100 ) / 100;
+			var model = DataPointModel.create( Math.round(new Date().getTime() / 1000), averageTemp );
+			DataLogger.addDataPoint(model);
+		}, this.options.temperature_read_interval);
+		/* Write the data we've captured to the data file and send our updates to the web app */
+		setInterval( function(){
+			DataLogger.sendDataUpdate();
+			DataLogger.writeDataToFile();	
+		}, this.options.data_logging_interval);
+	}
+};
+
+
+ThermoApp.init(spiADC);
+ThermoApp.run(spiADC);
