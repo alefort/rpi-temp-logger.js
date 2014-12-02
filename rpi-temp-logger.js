@@ -11,7 +11,7 @@ var spiADC = {
 	'options': {
 		'channel': 0,
 		'spiMaxSpeed': 20000,
-		'resistances_to_keep': this.spiMaxSpeed,
+		'resistances_to_keep': 100,
 		'ignore_data_beyond_pct': 0.05
 	},
 	'SPI': require( 'spi' ),
@@ -49,11 +49,11 @@ var spiADC = {
 		return data;		
 	},
 	storeSpiData: function( device, data ){			
-		this.resistances[this.res_index] = data;		
+		this.resistances[this.res_index] = data;
 	},
 	setNextResistanceIndex: function(){
 		this.res_index++;
-		if(this.res_index > (this.options.resistances_to_keep -1) ){
+		if(this.res_index >= (this.options.resistances_to_keep -1) ){
 			this.res_index = 0;
 		}
 	},
@@ -223,7 +223,7 @@ DataLogger.init( '../data/readings.data' );
 /* Open the spi device */
 spiADC.open();
 /* Start reading the data from the spi device every XX ms */
-setInterval( function(){ spiADC.read(); }, 1 / spiADC.options.spiMaxSpeed);
+setInterval( function(){ spiADC.read(); }, 1 / spiADC.options.resistances_to_keep);
 /* Let's get an average every XX ms */
 setInterval( function(){ 
 	var averageData = spiADC.getAverageData();
