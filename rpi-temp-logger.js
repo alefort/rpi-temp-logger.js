@@ -115,7 +115,7 @@ var spiADC = {
 var DataLogger = {
 	'options': {
 		'logfile': '',
-		'endpointUrl': 'http://192.168.1.141/dev/test.php',
+		'endpointUrl': 'http://192.168.1.126/dev/test.php',
 		'timeout': 5000
 	},	
 	'txError': false,
