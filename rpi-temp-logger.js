@@ -65,7 +65,7 @@ var spiADC = {
 			var data = self.handleSpiData( device, buf ); 
 			
 			if( data > 0 ){
-				self.storeSpiData( device, data );
+				self.storeSpiData( device, data+3 );
 				self.setNextResistanceIndex();
 			}
 		});			
@@ -186,9 +186,11 @@ var DataLogger = {
 				if (error || response.statusCode != 200) {
 					/* We've got an error to deal with, let's set the error code till we get a successful send */
 					self.txError = true;	
+
+
 					console.log('Error: ' + error);
 					console.log('Response: ' + response);
-					process.exit(1);
+					
 				}else{
 					self.txError = false;
 				}			
