@@ -10,7 +10,8 @@ var needle = require('needle');
 var spiADC = {
 	'options': {
 		'channel': 0,
-		'resistances_to_keep': 1000,
+		'spiMaxSpeed': 20000,
+		'resistances_to_keep': this.spiMaxSpeed,
 		'ignore_data_beyond_pct': 0.02		
 	},
 	'SPI': require( 'spi' ),
@@ -31,8 +32,8 @@ var spiADC = {
 			return;
 		}
 		
-		this.device = new this.SPI.Spi('/dev/spidev0.0', {}, function(s){s.open();});
-		
+		this.device = new this.SPI.Spi('/dev/spidev0.0', {'maxSpeed': this.options.spiMaxSpeed}, function(s){s.open();});
+
 		this.isOpen = true;
 	},
 	handleSpiData: function(device, buf){	
@@ -41,8 +42,8 @@ var spiADC = {
 		
 		// Let's exclude data readings that are 0 
 		// and readings that are more than +/- 10% of the previous reading (indicates a spike we should ignore)
-		if( data === 0 && Math.abs( ( data - this.resistances[this.resistances.length-1] ) / this.resistances[this.resistances.length-1] ) > this.options.ignore_data_beyond_pct ){
-			// Let's discard this reading
+		if( data === 0 || Math.abs( ( data - this.resistances[this.resistances.length-1] ) / this.resistances[this.resistances.length-1] ) > this.options.ignore_data_beyond_pct ){
+			// Let's discard this reading			
 			return -1;
 		}		
 		return data;		
@@ -65,7 +66,7 @@ var spiADC = {
 			var data = self.handleSpiData( device, buf ); 
 			
 			if( data > 0 ){
-				self.storeSpiData( device, data+3 );
+				self.storeSpiData( device, data );
 				self.setNextResistanceIndex();
 			}
 		});			
@@ -222,14 +223,14 @@ DataLogger.init( '../data/readings.data' );
 /* Open the spi device */
 spiADC.open();
 /* Start reading the data from the spi device every XX ms */
-setInterval( function(){ spiADC.read(); }, 33);
+setInterval( function(){ spiADC.read(); }, 1 / spiADC.options.spiMaxSpeed);
 /* Let's get an average every XX ms */
 setInterval( function(){ 
 	var averageData = spiADC.getAverageData();
 	var averageTemp = Math.round( spiADC.getAverageTemperature( averageData ) * 100 ) / 100;
 	var model = DataPointModel.create( Math.round(new Date().getTime() / 1000), averageTemp );
 	DataLogger.addDataPoint(model);
-}, 2000);
+}, 1000);
 /* Write the data we've captured to the data file and send our updates to the web app */
 setInterval( function(){
 	DataLogger.sendDataUpdate();
