@@ -12,7 +12,7 @@ var spiADC = {
 		'channel': 0,
 		'spiMaxSpeed': 20000,
 		'resistances_to_keep': this.spiMaxSpeed,
-		'ignore_data_beyond_pct': 0.02		
+		'ignore_data_beyond_pct': 0.05
 	},
 	'SPI': require( 'spi' ),
 	'isOpen': false,	
@@ -24,7 +24,7 @@ var spiADC = {
 		'nominal_resistance': 10000,		
 		'nominal_temp': 25,
 		'bcoefficient': 3950,
-		'calibration_offset': -0.07
+		'calibration_offset': 0
 	},	
 	open: function(){
 		if(this.isOpen === true){
@@ -33,7 +33,7 @@ var spiADC = {
 		}
 		
 		this.device = new this.SPI.Spi('/dev/spidev0.0', {'maxSpeed': this.options.spiMaxSpeed}, function(s){s.open();});
-
+		
 		this.isOpen = true;
 	},
 	handleSpiData: function(device, buf){	
@@ -81,7 +81,7 @@ var spiADC = {
 			sum += parseFloat(this.resistances[i]);
 		}
 		
-		return sum / this.resistances.length;		
+		return sum / this.resistances.length + this.thermistor.calibration_offset;		
 		
 	},
 	calculate_thermistor_resistance: function( average_raw ){
@@ -90,7 +90,7 @@ var spiADC = {
 		var thermistor_resistance =  (1023 / average_raw) - 1;				
 		thermistor_resistance = this.series_resistor / thermistor_resistance;		
 						
-		return thermistor_resistance + this.thermistor.calibration_offset;
+		return thermistor_resistance;
 	},
 	steinhart: function( thermistor_resistance ){
 		var steinhart = thermistor_resistance / this.thermistor.nominal_resistance;
