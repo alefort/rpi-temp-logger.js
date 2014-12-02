@@ -185,7 +185,10 @@ var DataLogger = {
 			function (error, response, body) {				
 				if (error || response.statusCode != 200) {
 					/* We've got an error to deal with, let's set the error code till we get a successful send */
-					self.txError = true;					
+					self.txError = true;	
+					console.log('Error: ' + error);
+					console.log('Response: ' + response);
+					process.exit(1);
 				}else{
 					self.txError = false;
 				}			
