@@ -234,7 +234,7 @@ setInterval( function(){
 	var averageTemp = Math.round( spiADC.getAverageTemperature( averageData ) * 100 ) / 100;
 	var model = DataPointModel.create( Math.round(new Date().getTime() / 1000), averageTemp );
 	DataLogger.addDataPoint(model);
-}, 1000);
+}, 3000);
 /* Write the data we've captured to the data file and send our updates to the web app */
 setInterval( function(){
 	DataLogger.sendDataUpdate();
