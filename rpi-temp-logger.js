@@ -1,3 +1,4 @@
+// Some bootstrapping
 // Let's serve up the data file via json
 var http = require( 'http' );
 // Let's get the filestream api to write the temp data
@@ -6,6 +7,9 @@ var fs = require( 'fs' );
 var gpio = require( 'rpi-gpio' );
 // Global request object for http get/post
 var needle = require('needle');
+// Global SPI object
+var spi = require( 'spi' );
+
 
 var spiADC = {
 	'options': {
@@ -14,7 +18,7 @@ var spiADC = {
 		'resistances_to_keep': 100,
 		'ignore_data_beyond_pct': 0.05
 	},
-	'SPI': require( 'spi' ),
+	'SPI': spi,
 	'isOpen': false,	
 	'device': '',
 	'resistances': [],	
@@ -41,7 +45,7 @@ var spiADC = {
 		var data = ((buf[1]&3) << 8) + buf[2];
 		
 		// Let's exclude data readings that are 0 
-		// and readings that are more than +/- 10% of the previous reading (indicates a spike we should ignore)
+		// and readings that are more than +/- 5% of the previous reading (indicates a spike we should ignore)
 		if( data === 0 || Math.abs( ( data - this.resistances[this.resistances.length-1] ) / this.resistances[this.resistances.length-1] ) > this.options.ignore_data_beyond_pct ){
 			// Let's discard this reading			
 			return -1;
