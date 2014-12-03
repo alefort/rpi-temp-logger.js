@@ -9,26 +9,28 @@ var gpio = require( 'rpi-gpio' );
 var needle = require('needle');
 // Global SPI object
 var spi = require( 'spi' );
-
+// ini module include
+var ini = require( 'ini' );
+var config = ini.parse(fs.readFileSync('./config/config.ini', 'utf-8'))
 
 var spiADC = {
 	'options': {
-		'channel': 0,
-		'spiMaxSpeed': 20000,
-		'resistances_to_keep': 100,
-		'ignore_data_beyond_pct': 0.05
+		'channel': config.spi.channel,
+		'spiMaxSpeed': config.spi.max_speed,
+		'resistances_to_keep': config.spi.resistances_to_keep,
+		'ignore_data_beyond_pct': config.spi.allowable_read_deviation
 	},
 	'SPI': spi,
 	'isOpen': false,	
 	'device': '',
 	'resistances': [],	
 	'res_index': 0,	
-	'series_resistor': 9860,
+	'series_resistor': config.spi.series_resistor,
 	'thermistor': {
-		'nominal_resistance': 10000,		
-		'nominal_temp': 25,
-		'bcoefficient': 3950,
-		'calibration_offset': 0
+		'nominal_resistance': config.spi.thermistor.nominal_resistance,		
+		'nominal_temp': config.spi.thermistor.nominal_temp,
+		'bcoefficient': config.spi.thermistor.b_coefficient,
+		'calibration_offset': config.spi.thermistor.calibration_offset
 	},	
 	open: function(){
 		if(this.isOpen === true){
@@ -120,17 +122,12 @@ var spiADC = {
 
 var DataLogger = {
 	'options': {
-		'logfile': '',
-		'endpointUrl': 'http://192.168.1.126/beer/rpi-graph/api.php',
-		'timeout': 5000
+		'logfile': config.datalogger.logfile,
+		'endpointUrl': config.datalogger.endpoint_url,
+		'timeout': config.datalogger.timeout
 	},	
 	'txError': false,
-	'data': [],
-	init: function(logfile){
-		this.options.logfile = logfile;		
-		// Return this object to be used once init'd
-		return this;
-	},
+	'data': [],	
 	addDataPoint: function(model){
 		this.data.push(model);
 	},
@@ -222,8 +219,8 @@ var httpServer = http.createServer(function (request, response) {
 
 var ThermoApp = {
 	'options': {
-		'temperature_read_interval': 10000,
-		'data_logging_interval': 20000
+		'temperature_read_interval': config.app.temperature_read_interval,
+		'data_logging_interval': config.app.data_logging_interval
 	},
 	init: function(spiADC){
 		/* Open the spi device */
@@ -248,9 +245,7 @@ var ThermoApp = {
 };
 
 // Listen on port 8000, IP defaults to 127.0.0.1
-httpServer.listen(8000);
-
-DataLogger.init( '../data/readings.data' );
+httpServer.listen(config.http.server_port);
 
 ThermoApp.init(spiADC);
 ThermoApp.run(spiADC);
