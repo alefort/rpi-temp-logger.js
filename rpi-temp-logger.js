@@ -11,7 +11,7 @@ var needle = require('needle');
 var spi = require( 'spi' );
 // ini module include
 var ini = require( 'ini' );
-var config = ini.parse(fs.readFileSync('./config/config.ini', 'utf-8'))
+var config = ini.parse(fs.readFileSync('config/config.ini', 'utf-8'));
 
 var spiADC = {
 	'options': {
