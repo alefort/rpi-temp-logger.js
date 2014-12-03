@@ -15,8 +15,8 @@ var config = ini.parse(fs.readFileSync('config/config.ini', 'utf-8'));
 
 var spiADC = {
 	'options': {
-		'channel': config.spi.channel,
-		'spiMaxSpeed': config.spi.max_speed,
+		'channel': parseInt(config.spi.channel),
+		'spiMaxSpeed': parseInt(config.spi.max_speed),
 		'resistances_to_keep': config.spi.resistances_to_keep,
 		'ignore_data_beyond_pct': config.spi.allowable_read_deviation
 	},
@@ -25,12 +25,12 @@ var spiADC = {
 	'device': '',
 	'resistances': [],	
 	'res_index': 0,	
-	'series_resistor': config.spi.series_resistor,
+	'series_resistor': parseInt(config.spi.series_resistor),
 	'thermistor': {
-		'nominal_resistance': config.spi.thermistor.nominal_resistance,		
-		'nominal_temp': config.spi.thermistor.nominal_temp,
-		'bcoefficient': config.spi.thermistor.b_coefficient,
-		'calibration_offset': config.spi.thermistor.calibration_offset
+		'nominal_resistance': parseInt(config.spi.thermistor.nominal_resistance),		
+		'nominal_temp': parseInt(config.spi.thermistor.nominal_temp),
+		'bcoefficient': parseInt(config.spi.thermistor.b_coefficient),
+		'calibration_offset': parseInt(config.spi.thermistor.calibration_offset)
 	},	
 	open: function(){
 		if(this.isOpen === true){
@@ -124,7 +124,7 @@ var DataLogger = {
 	'options': {
 		'logfile': config.datalogger.logfile,
 		'endpointUrl': config.datalogger.endpoint_url,
-		'timeout': config.datalogger.timeout
+		'timeout': parseInt(config.datalogger.timeout)
 	},	
 	'txError': false,
 	'data': [],	
@@ -219,8 +219,8 @@ var httpServer = http.createServer(function (request, response) {
 
 var ThermoApp = {
 	'options': {
-		'temperature_read_interval': config.app.temperature_read_interval,
-		'data_logging_interval': config.app.data_logging_interval
+		'temperature_read_interval': parseInt(config.app.temperature_read_interval),
+		'data_logging_interval': parseInt(config.app.data_logging_interval)
 	},
 	init: function(spiADC){
 		/* Open the spi device */
